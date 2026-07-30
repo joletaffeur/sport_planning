@@ -13,6 +13,7 @@ class CreateWorkoutScreen extends StatefulWidget {
   final ModelWorkout? workout;
   final WorkoutRepository repository;
   final int? index;
+  
 
   @override
   State<CreateWorkoutScreen> createState() => _CreateWorkoutScreenState();
@@ -25,6 +26,12 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
 
   final List<ModelExercise> exercises = [];
   
+  @override
+  void dispose() {
+    workoutNameController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -123,7 +130,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
                 ),
                 ElevatedButton( // sauvgarde le wokout
                   onPressed: createWorkout,
-                  child: widget.workout == null ? const Text("Créer la séance",) : Text("Sauvgarder la modification"),
+                  child: widget.index == null ? const Text("Créer la séance",) : Text("Sauvgarder la modification"),
                 ),
               ],
             ),

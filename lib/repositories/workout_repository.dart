@@ -14,6 +14,10 @@ class WorkoutRepository {
     return box.values.toList();
   }
 
+  ModelWorkout getWorkout(int index) {
+    return box.getAt(index)!;
+  }
+
   Future<void> deleteWorkout(int index) async {
     await box.deleteAt(index);
   }

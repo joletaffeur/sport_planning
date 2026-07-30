@@ -17,12 +17,20 @@ class WorkoutDetailScreen extends StatefulWidget {
 
 class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
 
+  late ModelWorkout workout;
+
+  @override
+  void initState() {
+    super.initState();
+    workout = widget.workout;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Detail - ${widget.workout.name}",
+            "Detail - ${workout.name}",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold
@@ -47,28 +55,29 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
               Icons.edit,
               color: Colors.yellow,
             ),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              await Navigator.push(
               context,
                 MaterialPageRoute(
                   builder: (context) => CreateWorkoutScreen(
-                    workout: widget.workout,
+                    workout: workout,
                     repository: widget.repository,
                     index: widget.index,
                   ),
                 ),
-              ).then((value) {
-                setState(() {});
+              );
+              setState(() {
+                workout = widget.repository.getWorkout(widget.index);
               });
             },
           )
         ],
       ),
       body: ListView.builder(
-        itemCount: widget.workout.exercises.length,
+        itemCount: workout.exercises.length,
         itemBuilder: (context, index) {
           
-          final ModelExercise exercise = widget.workout.exercises[index];
+          final ModelExercise exercise = workout.exercises[index];
 
           return Card(
             margin: const EdgeInsets.all(8),
