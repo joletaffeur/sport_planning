@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:sport_planning/repositories/workout_repository.dart';
+import 'package:sport_planning/models/week_day.dart';
 import 'models/model_workout.dart';
 import 'models/model_exercise.dart';
 import 'screens/home_screen.dart';
@@ -12,6 +13,7 @@ void main() async {
 
   await Hive.initFlutter();
 
+  Hive.registerAdapter(WeekDayAdapter());
   Hive.registerAdapter(ModelWorkoutAdapter());
   Hive.registerAdapter(ModelExerciseAdapter());
 

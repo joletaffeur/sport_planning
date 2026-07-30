@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sport_planning/models/model_workout.dart';
 import 'package:sport_planning/screens/workout_detail_sceen.dart';
 import 'package:sport_planning/repositories/workout_repository.dart';
+import 'package:sport_planning/screens/today_workout_screen.dart';
 import 'create_workout_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,20 +32,44 @@ class _HomeScreenState extends State<HomeScreen> {
         foregroundColor: Colors.white,
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CreateWorkoutScreen(
-                repository: widget.repository,
-              ),
-            ),
-          ).then((value) {
-            setState(() {});
-          });
-        },
-        child: const Icon(Icons.add),
+
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+
+          FloatingActionButton(
+            heroTag: "create",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateWorkoutScreen(
+                    repository: widget.repository,
+                  ),
+                ),
+              ).then((value) {
+                setState(() {});
+              });
+            },
+            child: const Icon(Icons.add),
+          ),
+
+          FloatingActionButton(
+            heroTag: "today",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodayWorkoutScreen(
+                    repository: widget.repository,
+                  ),
+                ),
+              );
+            },
+            child: const Icon(Icons.calendar_today),
+          ),
+
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 

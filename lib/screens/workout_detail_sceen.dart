@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:sport_planning/models/week_day.dart';
 import 'package:sport_planning/models/model_exercise.dart';
 import 'package:sport_planning/repositories/workout_repository.dart';
 import '../models/model_workout.dart';
@@ -18,6 +20,25 @@ class WorkoutDetailScreen extends StatefulWidget {
 class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
 
   late ModelWorkout workout;
+
+  String getDayName(WeekDay day) {
+    switch (day) {
+      case WeekDay.monday:
+        return "Lundi";
+      case WeekDay.tuesday:
+        return "Mardi";
+      case WeekDay.wednesday:
+        return "Mercredi";
+      case WeekDay.thursday:
+        return "Jeudi";
+      case WeekDay.friday:
+        return "Vendredi";
+      case WeekDay.saturday:
+        return "Samedi";
+      case WeekDay.sunday:
+        return "Dimanche";
+    }
+  }
 
   @override
   void initState() {
@@ -73,30 +94,60 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: workout.exercises.length,
-        itemBuilder: (context, index) {
-          
-          final ModelExercise exercise = workout.exercises[index];
+      body: ListView(
+        children: [
 
-          return Card(
-            margin: const EdgeInsets.all(8),
-            child: ListTile(
-              title: Text(
-                exercise.name,
+          // Les exercices
+          for (final exercise in workout.exercises)
+            Card(
+              margin: const EdgeInsets.all(8),
+              child: ListTile(
+                title: Text(exercise.name),
+                subtitle: Text(
+                  "${exercise.sets} séries • "
+                  "${exercise.reps} répétitions • "
+                  "${exercise.rest}s repos",
+                ),
               ),
-
-              subtitle: Text(
-                "${exercise.sets} séries • "
-                "${exercise.reps} répétitions • "
-                "${exercise.rest}s repos",
-              ),
-
             ),
 
-          );
-        },
+          const SizedBox(height: 20),
 
+          const Divider(),
+
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "Programme de la semaine",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          for (final day in WeekDay.values)
+            CheckboxListTile(
+              title: Text(getDayName(day)),
+              value: workout.days.contains(day),
+              onChanged: (checked) async {
+                setState(() {
+                  if (checked!) {
+                    if (!workout.days.contains(day)) {
+                      workout.days.add(day);
+                    }
+                  } else {
+                    workout.days.remove(day);
+                  }
+                });
+
+                await widget.repository.updateWorkout(
+                  widget.index,
+                  workout,
+                );
+              },
+            ),
+        ],
       )
 
     );

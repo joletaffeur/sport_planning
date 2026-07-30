@@ -19,17 +19,20 @@ class ModelWorkoutAdapter extends TypeAdapter<ModelWorkout> {
     return ModelWorkout(
       name: fields[0] as String,
       exercises: (fields[1] as List?)?.cast<ModelExercise>(),
+      days: (fields[2] as List).cast<WeekDay>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ModelWorkout obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.exercises);
+      ..write(obj.exercises)
+      ..writeByte(2)
+      ..write(obj.days);
   }
 
   @override
