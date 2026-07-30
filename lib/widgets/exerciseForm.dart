@@ -26,10 +26,11 @@ class _ExerciseFormState extends State<ExerciseForm> {
     return Card(
       margin: const EdgeInsets.all(12),
       elevation: 8,
+      color: Color.fromARGB(255, 32, 32, 32),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(16),
         side: const BorderSide(
-          color: Colors.blue,
+          color: Colors.red,
           width: 2
         )
       ),
@@ -50,6 +51,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white
                   ),
                 ),
                 IconButton(
@@ -66,6 +68,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
               initialValue: widget.exercise.name,
               decoration: const InputDecoration(
                 labelText: "Nom de l'exercice",
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                )
               ),
               onChanged: (value) {
                 widget.exercise.name = value;
@@ -78,6 +83,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: "Nombre de séries",
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                )
               ),
               onChanged: (value) {
                 widget.exercise.sets = int.tryParse(value) ?? 0;
@@ -90,6 +98,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: "Répétitions",
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                )
               ),
               onChanged: (value) {
                 widget.exercise.reps = int.tryParse(value) ?? 0;
@@ -102,6 +113,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: "Temps de repos",
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                )
               ),
               onChanged: (value) {
                 widget.exercise.rest = int.tryParse(value) ?? 0;

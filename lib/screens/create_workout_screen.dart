@@ -83,7 +83,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-
+      backgroundColor: const Color.fromARGB(255, 16, 16, 16),
       appBar: AppBar( // la bar en haut là
         title: const Text(
           "Create Workout",
@@ -93,22 +93,44 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 32, 32, 32),
         foregroundColor: Colors.white,
         centerTitle: true,
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.red,
+            width: 5,
+          ),
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.only(
+                top: 8,
+                left: 8,
+                right: 8,
+                bottom: 55,
+              ),
               children: [
                 TextField( // input pour le nom du workout
                   controller: workoutNameController,
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 32, 32, 32),
+
                     labelText: "Workout name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(35)), 
+                    labelStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(35)),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 2,
+                      ),
+
                     )
                   ),
                 ),
@@ -124,13 +146,28 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
                   ),
                 ElevatedButton( // ajoute un exercise vide
                   onPressed: addExerciseForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
                   child: const Text(
                     "+ Ajouter un exercice",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 ElevatedButton( // sauvgarde le wokout
                   onPressed: createWorkout,
-                  child: widget.index == null ? const Text("Créer la séance",) : Text("Sauvgarder la modification"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white
+                  ),
+                  child: widget.index == null ? const Text(
+                    "Créer la séance",
+                  ) :
+                  Text(
+                    "Sauvgarder la modification"
+                  ),
                 ),
               ],
             ),

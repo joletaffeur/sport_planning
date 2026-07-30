@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sport_planning/models/week_day.dart';
-import 'package:sport_planning/models/model_exercise.dart';
 import 'package:sport_planning/repositories/workout_repository.dart';
-import '../models/model_workout.dart';
+import 'package:sport_planning/models/model_workout.dart';
 import 'package:sport_planning/screens/create_workout_screen.dart';
 
 class WorkoutDetailScreen extends StatefulWidget {
@@ -49,7 +48,14 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.red,
+            width: 5,
+          ),
+        ),
         title: Text(
             "Detail - ${workout.name}",
             style: TextStyle(
@@ -57,7 +63,7 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
               fontWeight: FontWeight.bold
             ),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 32, 32, 32),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -101,12 +107,31 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
           for (final exercise in workout.exercises)
             Card(
               margin: const EdgeInsets.all(8),
+              color: Color.fromARGB(255, 32, 32, 32),
+              elevation: 8,
+              shadowColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(
+                  color: Colors.red,
+                  width: 2,
+                ),
+              ),
               child: ListTile(
-                title: Text(exercise.name),
+                title: Text(
+                  exercise.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 subtitle: Text(
                   "${exercise.sets} séries • "
                   "${exercise.reps} répétitions • "
                   "${exercise.rest}s repos",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -120,33 +145,59 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
             child: Text(
               "Programme de la semaine",
               style: TextStyle(
+                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-
-          for (final day in WeekDay.values)
-            CheckboxListTile(
-              title: Text(getDayName(day)),
-              value: workout.days.contains(day),
-              onChanged: (checked) async {
-                setState(() {
-                  if (checked!) {
-                    if (!workout.days.contains(day)) {
-                      workout.days.add(day);
-                    }
-                  } else {
-                    workout.days.remove(day);
-                  }
-                });
-
-                await widget.repository.updateWorkout(
-                  widget.index,
-                  workout,
-                );
-              },
+          Card(
+            margin: const EdgeInsets.all(8),
+            color: const Color.fromARGB(255, 32, 32, 32),
+            elevation: 8,
+            shadowColor: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: const BorderSide(
+                color: Colors.red,
+                width: 2,
+              ),
             ),
+            child: Column(
+              children: [
+                for (final day in WeekDay.values)
+                  CheckboxListTile(
+                    title: Text(
+                      getDayName(day),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    activeColor: Colors.red,
+                    checkColor: Colors.white,
+                    value: workout.days.contains(day),
+
+                    onChanged: (checked) async {
+                      setState(() {
+                        if (checked == true) {
+                          if (!workout.days.contains(day)) {
+                            workout.days.add(day);
+                          }
+                        } else {
+                          workout.days.remove(day);
+                        }
+                      });
+
+                      await widget.repository.updateWorkout(
+                        widget.index,
+                        workout,
+                      );
+                    },
+                  ),
+              ],
+            ),
+          ),
         ],
       )
 

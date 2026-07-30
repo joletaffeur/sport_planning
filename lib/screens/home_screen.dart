@@ -19,7 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
+        shadowColor: Colors.red,
+        elevation: 8,
         title: const Text(
           "Mes séances",
           style: TextStyle(
@@ -28,9 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 16, 16, 16),
         foregroundColor: Colors.white,
         centerTitle: true,
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.red,
+            width: 5,
+          ),
+        ),
+
       ),
 
       floatingActionButton: Row(
@@ -38,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
 
           FloatingActionButton(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.black,
             heroTag: "create",
             onPressed: () {
               Navigator.push(
@@ -55,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           FloatingActionButton(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.black,
             heroTag: "today",
             onPressed: () {
               Navigator.push(
@@ -73,76 +87,94 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-      body: FutureBuilder(
-        future: Future.value(widget.repository.getWorkouts()),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final workouts = snapshot.data ?? [];
-          print("Workouts lus : ${workouts.length}");
+      body: Stack(
+        children: [
 
-          return ListView.builder(
-            itemCount: workouts.length,
+          // Image de fond
+          Positioned.fill(
+            child: Image.asset(
+              "assets/backgrounds/home_background.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
 
-            itemBuilder: (context, index) {
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withValues(
+                alpha: 0.5
+              ),
+            ),
+          ),
 
-              final ModelWorkout workout = workouts[index];
+          // Ton contenu
+          FutureBuilder(
+            future: Future.value(widget.repository.getWorkouts()),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
+              final workouts = snapshot.data ?? [];
 
-              return Card(
-                margin: const EdgeInsets.all(8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: const BorderSide(
-                    color: Colors.blue,
-                    width: 2,
-                  ),
-                ),
+              return ListView.builder(
+                itemCount: workouts.length,
 
-                child: ListTile(
-                  tileColor: Colors.orange,
+                itemBuilder: (context, index) {
+                  final ModelWorkout workout = workouts[index];
 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  return Card(
+                    margin: const EdgeInsets.all(8),
+                    color: const Color.fromARGB(255, 16, 16, 16),
+                    elevation: 8,
+                    shadowColor: Colors.red,
 
-                  title: Text(
-                    workout.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: const BorderSide(
+                        color: Colors.red,
+                        width: 2,
+                      ),
                     ),
-                  ),
 
-                  subtitle: Text(
-                    "${workout.exercises.length} exercises",
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WorkoutDetailScreen(
-                          workout: workout,
-                          repository: widget.repository,
-                          index: index,
+                    child: ListTile(
+                      title: Text(
+                        workout.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ).then((value) {
-                      setState(() {});
-                    });
-                  },
-                ),
+
+                      subtitle: Text(
+                        "${workout.exercises.length} exercises",
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WorkoutDetailScreen(
+                              workout: workout,
+                              repository: widget.repository,
+                              index: index,
+                            ),
+                          ),
+                        ).then((value) {
+                          setState(() {});
+                        });
+                      },
+                    ),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }
