@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sport_planning/models/model_workout.dart';
 import 'package:sport_planning/screens/workout_detail_sceen.dart';
-import 'package:sport_planning/services/workout_storage.dart';
+import 'package:sport_planning/repositories/workout_repository.dart';
 import 'create_workout_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.repository});
+
+  final WorkoutRepository repository;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CreateWorkoutScreen(),
+              builder: (context) => CreateWorkoutScreen(
+                repository: widget.repository,
+              ),
             ),
           ).then((value) {
             setState(() {});
@@ -43,57 +47,78 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ListView.builder(
-        itemCount: WorkoutStorage.workouts.length,
-        itemBuilder: (context, index) {
-          
-          final ModelWorkout workout = WorkoutStorage.workouts[index];
 
-          return Card(
-            margin: const EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(
-                color: Colors.blue,
-                width: 2,
-              ),
-            ),
+      body: FutureBuilder(
+        future: Future.value(widget.repository.getWorkouts()),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final workouts = snapshot.data ?? [];
+          print("Workouts lus : ${workouts.length}");
 
-            child: ListTile(
-              tileColor: Colors.orange,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+          return ListView.builder(
+            itemCount: workouts.length,
 
-              title: Text(
-                workout.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                "${workout.exercises.length} exercises",
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WorkoutDetailScreen(
-                      workout: workout,
-                    ),  
+            itemBuilder: (context, index) {
+
+              final ModelWorkout workout = workouts[index];
+
+
+              return Card(
+                margin: const EdgeInsets.all(8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: const BorderSide(
+                    color: Colors.blue,
+                    width: 2,
                   ),
-                ).then((value) {
-                  setState(() {});
-                });
-              },
-            ),
+                ),
+
+                child: ListTile(
+                  tileColor: Colors.orange,
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  title: Text(
+                    workout.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  subtitle: Text(
+                    "${workout.exercises.length} exercises",
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WorkoutDetailScreen(
+                          workout: workout,
+                          repository: widget.repository,
+                          index: index,
+                        ),
+                      ),
+                    ).then((value) {
+                      setState(() {});
+                    });
+                  },
+                ),
+              );
+            },
           );
-        }
-      )
+        },
+      ),
     );
   }
 }

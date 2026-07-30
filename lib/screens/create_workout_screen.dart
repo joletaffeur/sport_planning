@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:sport_planning/widgets/exerciseForm.dart';
 import 'package:sport_planning/models/model_exercise.dart';
 import 'package:sport_planning/models/model_workout.dart';
-import 'package:sport_planning/services/workout_storage.dart';
+import 'package:sport_planning/repositories/workout_repository.dart';
 
 
 class CreateWorkoutScreen extends StatefulWidget {
 
-  const CreateWorkoutScreen({super.key, this.workout});
+  const CreateWorkoutScreen({super.key, required this.repository, this.workout, this.index});
 
   final ModelWorkout? workout;
+  final WorkoutRepository repository;
+  final int? index;
 
   @override
   State<CreateWorkoutScreen> createState() => _CreateWorkoutScreenState();
@@ -30,8 +32,15 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
     if (widget.workout == null) {
       addExerciseForm();
     } else {
-      for (int i = 0; i < widget.workout!.exercises.length; i++) {
-        exercises.add(widget.workout!.exercises[i]);
+      for (final exercise in widget.workout!.exercises) {
+        exercises.add(
+          ModelExercise(
+            name: exercise.name,
+            sets: exercise.sets,
+            reps: exercise.reps,
+            rest: exercise.rest,
+          ),
+        );
       }
 
       workoutNameController.text = widget.workout!.name;
@@ -44,16 +53,22 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
     });
   }
 
-  void createWorkout() { // methode pour sauvgarder le workout
-
+  Future<void> createWorkout() async {
     final workout = ModelWorkout(
       name: workoutNameController.text == '' ? "default" : workoutNameController.text,
       exercises: exercises,
     );
-    if (widget.workout != null) {
-      WorkoutStorage.removeWorkout(widget.workout!);
+    if (widget.index != null) {
+      await widget.repository.updateWorkout(
+        widget.index!,
+        workout,
+      );
+    } else {
+      await widget.repository.addWorkout(workout);
     }
-    WorkoutStorage.addWorkout(workout);
+
+    print("Box contient ${widget.repository.getWorkouts().length} séance(s)");
+
     Navigator.pop(context);
   }
 

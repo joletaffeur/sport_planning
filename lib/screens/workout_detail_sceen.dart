@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sport_planning/models/model_exercise.dart';
-import 'package:sport_planning/services/workout_storage.dart';
+import 'package:sport_planning/repositories/workout_repository.dart';
 import '../models/model_workout.dart';
 import 'package:sport_planning/screens/create_workout_screen.dart';
 
 class WorkoutDetailScreen extends StatefulWidget {
-  const WorkoutDetailScreen({super.key, required this.workout});
+  const WorkoutDetailScreen({super.key, required this.workout, required this.repository, required this.index,});
 
   final ModelWorkout workout;
+  final WorkoutRepository repository;
+  final int index;
 
   @override
   State<WorkoutDetailScreen> createState() => _WorkoutDetailScreenState();
@@ -34,8 +36,8 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
               Icons.delete,
               color: Colors.red,
             ),
-            onPressed: () {
-              WorkoutStorage.removeWorkout(widget.workout);
+            onPressed: () async {
+              await widget.repository.deleteWorkout(widget.index);
               Navigator.pop(context);
             },
           ),
@@ -51,6 +53,8 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
                 MaterialPageRoute(
                   builder: (context) => CreateWorkoutScreen(
                     workout: widget.workout,
+                    repository: widget.repository,
+                    index: widget.index,
                   ),
                 ),
               ).then((value) {

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:sport_planning/repositories/workout_repository.dart';
 import 'models/model_workout.dart';
 import 'models/model_exercise.dart';
 import 'screens/home_screen.dart';
@@ -14,18 +15,32 @@ void main() async {
   Hive.registerAdapter(ModelWorkoutAdapter());
   Hive.registerAdapter(ModelExerciseAdapter());
 
-  await Hive.openBox<ModelWorkout>("workouts");
+  final box = await Hive.openBox<ModelWorkout>("workouts");
 
-  runApp(const MainApp());
+  print("Box name: ${box.name}");
+  print("Box length: ${box.length}");
+
+  final repository = WorkoutRepository(box);
+
+
+  runApp(
+    MainApp(
+      repository: repository,
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({super.key, required this.repository});
+
+  final WorkoutRepository repository;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MaterialApp(
+      home: HomeScreen(
+        repository: repository
+      ),
     );
   }
 }
