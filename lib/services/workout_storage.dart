@@ -1,4 +1,4 @@
-import '../models/workout.dart';
+import '../models/model_workout.dart';
 
 class WorkoutStorage {
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sport_planning/models/exercise.dart';
+import 'package:sport_planning/models/model_exercise.dart';
 
 
 class ExerciseForm extends StatefulWidget {

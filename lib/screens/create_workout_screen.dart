@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:sport_planning/widgets/exerciseForm.dart';
-import 'package:sport_planning/models/exercise.dart';
-import 'package:sport_planning/models/workout.dart';
+import 'package:sport_planning/models/model_exercise.dart';
+import 'package:sport_planning/models/model_workout.dart';
 import 'package:sport_planning/services/workout_storage.dart';
 
 

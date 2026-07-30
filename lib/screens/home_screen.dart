@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sport_planning/models/workout.dart';
+import 'package:sport_planning/models/model_workout.dart';
 import 'package:sport_planning/screens/workout_detail_sceen.dart';
 import 'package:sport_planning/services/workout_storage.dart';
 import 'create_workout_screen.dart';
-import 'package:sport_planning/database/app_database.dart';
-import 'package:sport_planning/repositories/workout_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

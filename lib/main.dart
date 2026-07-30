@@ -1,8 +1,21 @@
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import 'models/model_workout.dart';
+import 'models/model_exercise.dart';
 import 'screens/home_screen.dart';
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(ModelWorkoutAdapter());
+  Hive.registerAdapter(ModelExerciseAdapter());
+
+  await Hive.openBox<ModelWorkout>("workouts");
+
   runApp(const MainApp());
 }
 
