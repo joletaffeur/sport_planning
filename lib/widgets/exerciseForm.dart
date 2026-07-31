@@ -65,6 +65,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
             ),
 
             TextFormField(
+              style: TextStyle(
+                color: Colors.white,
+              ),
               initialValue: widget.exercise.name,
               decoration: const InputDecoration(
                 labelText: "Nom de l'exercice",
@@ -79,6 +82,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
 
 
             TextFormField(
+              style: TextStyle(
+                color: Colors.white,
+              ),
               initialValue: widget.exercise.sets == 0 ? '' : widget.exercise.sets.toString(),
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
@@ -94,6 +100,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
 
 
             TextFormField(
+              style: TextStyle(
+                color: Colors.white,
+              ),
               initialValue: widget.exercise.reps == 0 ? '' : widget.exercise.reps.toString(),
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
@@ -109,6 +118,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
 
 
             TextFormField(
+              style: TextStyle(
+                color: Colors.white,
+              ),
               initialValue: widget.exercise.rest == 0 ? '' : widget.exercise.rest.toString(),
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(

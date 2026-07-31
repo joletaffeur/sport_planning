@@ -115,8 +115,12 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
               ),
               children: [
                 TextField( // input pour le nom du workout
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                   controller: workoutNameController,
                   decoration: InputDecoration(
+                    
                     filled: true,
                     fillColor: const Color.fromARGB(255, 32, 32, 32),
 
